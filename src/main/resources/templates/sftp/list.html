@@ -1,8 +1,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+	
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/x-icon" th:href="@{/img/favicon.ico}" />
+	
+	<link rel="stylesheet" th:href="@{webjars/bootstrap/4.2.1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    
 </head>
 
 <body>
-<p th:text="${svc}">Here is sample text</p>
+<p th:text="${svc}">Here is svc output</p>
+<p th:text="${dir}">Here is dir output</p>
+
+<script type="text/javascript" th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}"></script>
 </body>
 </html>
