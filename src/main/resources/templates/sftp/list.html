@@ -11,8 +11,26 @@
 </head>
 
 <body>
-<p th:text="${svc}">Here is svc output</p>
-<p th:text="${dir}">Here is dir output</p>
+
+<h1 th:text="${dir}">/server/folder</h1>
+<table th:unless="${error}" class="table table-striped table-bordered table-hover">
+<tr>
+	<th th:text="#{name}">Name</th>
+	<th th:text="#{type}">Type</th>
+	<th th:text="#{date}">Date</th>
+	<th th:text="#{size}">Size</th>
+</tr>
+<tr th:each="item : ${list}">
+	<td th:text="${item.name}">NAME</td>
+	<td th:text="${item.dir} ? 'dir' : 'file'">TYPE</td>
+	<td th:text="${#dates.format(new Long(item.mtime) * 1000, 'dd.MM.yyyy HH:mm:ss')}">DATE</td>
+	<td th:text="${item.size}">SIZE</td>
+</tr>
+</table>
+
+<p th:if="${error}" th:text="${error.message}" class="alert alert-danger">Error message (if exists)</p>
+
+<!-- p th:text="${svc}">Here is svc output</p -->
 
 <script type="text/javascript" th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}"></script>
 </body>
