@@ -1,3 +1,12 @@
 *{
-	color: blue;
+	color: gray;
+}
+th{
+	color: black;
+}
+.name-column span{
+	margin-left: 10px;
+}
+.fa{
+	font-size: 1.5em;
 }
