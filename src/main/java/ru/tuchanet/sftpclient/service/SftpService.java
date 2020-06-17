@@ -1,5 +1,6 @@
 package ru.tuchanet.sftpclient.service;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -96,6 +97,10 @@ public class SftpService implements InitializingBean{
 	@Override
 	public String toString() {
 		return "SftpService [host=" + host + ", port=" + port + ", user=" + user + ", pass=" + pass + "]";
+	}
+
+	public InputStream getFile(String file) throws SftpException, JSchException {
+		return getSFTP().get(file);
 	}
 
 	

@@ -1,15 +1,22 @@
 package ru.tuchanet.sftpclient.controller;
 
+import java.io.ByteArrayInputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
@@ -55,6 +62,29 @@ public class SftpController {
 		return "sftp/list";
 	}
 
+	
+	@GetMapping("/download")
+	@ResponseBody
+	public ResponseEntity<InputStreamResource> download(Model model, HttpServletResponse response, 
+			@RequestParam(name = "file", required = true, defaultValue = "/") String file) throws SftpException, JSchException {
+		
+		List<SftpItem> list = sftpService.list(file);
+		
+		if(list.size() > 0 && ! list.get(0).isDir()) {
+			SftpItem item = list.get(0);
+			String fileName = Paths.get(file).getFileName().toString();
+			return ResponseEntity.ok()
+					.header("Content-Type", "application/octet-stream")
+					.header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
+					.header("Content-Length", Long.toString(item.getSize()))
+					.body(new InputStreamResource(sftpService.getFile(file)));
+		}
+		
+		return ((BodyBuilder) ResponseEntity.notFound())
+				.body(new InputStreamResource(new ByteArrayInputStream("File not found".getBytes())));
+	}	
+	
+	
 	private void sort(List<SftpItem> list, String sort, String dir) {
 		Comparator<SftpItem> comparator;
 		

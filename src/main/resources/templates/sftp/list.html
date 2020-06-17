@@ -23,7 +23,7 @@
 	<td></td>
 </tr>
 <tr th:each="item : ${list}">
-	<td class="name-column"><a th:href="${item.dir} ? @{list(sort=${sort},dir=${dir},folder=${folder.replace('\/+$','') + '/' + item.name})}" th:remove="! ${item.dir} ? tag : none"><i class="fa " th:classappend="${item.dir} ? 'fa-folder' : 'fa-file'"></i><span th:text="${item.name}">NAME</span></a></td>
+	<td class="name-column"><a th:href="${item.dir} ? @{list(sort=${sort},dir=${dir},folder=${folder.replace('\/+$','') + '/' + item.name})} : @{/download(file=${folder.replace('\/+$','') + '/' + item.name})}"><i class="fa " th:classappend="${item.dir} ? 'fa-folder' : 'fa-file'"></i><span th:text="${item.name}">NAME</span></a></td>
 	<td th:text="${item.dir} ? 'dir' : 'file'">TYPE</td>
 	<td th:text="${#dates.format(new Long(item.mtime) * 1000, 'dd.MM.yyyy HH:mm:ss')}">DATE</td>
 	<td th:text="${item.size}">SIZE</td>
