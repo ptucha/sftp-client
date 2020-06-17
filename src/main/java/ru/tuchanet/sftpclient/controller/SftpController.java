@@ -1,5 +1,6 @@
 package ru.tuchanet.sftpclient.controller;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -31,6 +32,9 @@ public class SftpController {
 		List<SftpItem> list;
 		Exception error = null;
 		
+		// Strip .. in folder name
+		folder = Paths.get(folder).normalize().toString();
+		
 		try {
 			list = sftpService.list(folder);
 		} catch (SftpException | JSchException e) {
@@ -44,6 +48,7 @@ public class SftpController {
 		model.addAttribute("error", error);
 		model.addAttribute("list", list);
 		model.addAttribute("folder", folder);
+		model.addAttribute("sort", sort);
 		model.addAttribute("dir", dir);
 		model.addAttribute("svc", sftpService.toString());
 		
