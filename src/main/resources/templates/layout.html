@@ -1,0 +1,23 @@
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(title,content)">
+<head>
+	
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/x-icon" th:href="@{/img/favicon.ico}" />
+	
+	<link rel="stylesheet" th:href="@{webjars/bootstrap/4.2.1/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{webjars/font-awesome/5.13.0/css/all.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    
+    <title th:replace="${title}">Site title</title>
+</head>
+
+<body>
+
+<div class="container" th:replace="${content}">
+Content should be placed here
+</div>
+
+<script type="text/javascript" th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}"></script>
+</body>
+</html>
