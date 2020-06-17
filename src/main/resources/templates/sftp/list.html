@@ -16,7 +16,7 @@
 	<th><a th:text="#{date}" th:href="@{list(sort=mtime,dir=(${sort} == 'mtime' and ${dir} == 'asc' ? 'desc' : 'asc'),folder=${folder})}">Date</a></th>
 	<th><a th:text="#{size}" th:href="@{list(sort=size,dir=(${sort} == 'size' and ${dir} == 'asc' ? 'desc' : 'asc'),folder=${folder})}">Size</a></th>
 </tr>
-<tr>
+<tr th:remove="${folder} == '/' ? 'all'">
 	<td class="name-column"><a th:href="@{list(sort=${sort},dir=${dir},folder=${folder.replace('\/+$','') + '/..'})}"><i class="fa fa-folder"></i><span>..</span></a></td>
 	<td th:text="'dir'">TYPE</td>
 	<td></td>
