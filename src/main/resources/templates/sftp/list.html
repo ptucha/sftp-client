@@ -8,6 +8,7 @@
 
 <div class="container" id="content">
 
+<a th:href="@{/logout}" th:text="#{logout}" class="btn btn-link" style="float: right; line-height: 2.5rem">Logout</a>
 <h1 th:text="${folder}">/server/folder</h1>
 <table th:unless="${error}" class="table table-striped table-bordered table-hover">
 <tr>

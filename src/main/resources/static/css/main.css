@@ -10,3 +10,13 @@ th{
 .fa{
 	font-size: 1.5em;
 }
+
+
+.table-login{
+ 	outline-style: solid;
+	outline-width: 1px;
+	outline-color: gray;
+}
+.table-login td{
+ 	border: none;
+}

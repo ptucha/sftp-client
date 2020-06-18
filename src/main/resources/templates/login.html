@@ -1,0 +1,35 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{:: title},~{:: #content})">
+<head>
+	<meta charset="utf-8">
+    <title th:text="#{login}">Login</title>
+</head>
+
+<body>
+
+<div class="container" id="content" style="max-width: 400px;">
+
+	<h1 th:text="#{login}">Login</h1>
+ 
+    <div th:if="${errorMessage}" th:text="${errorMessage}" style="color:red; font-weight: bold; margin: 30px 0px;">There are authentication error message</div>
+ 
+    <form name='login' action="/login" method='POST'>
+        <table class="table table-login">
+            <tr>
+                <td th:text="#{login_user_name}">UserName:</td>
+                <td><input type='text' name='username' value=''></td>
+            </tr>
+            <tr>
+                <td th:text="#{login_password}">Password:</td>
+                <td><input type='password' name='password' /></td>
+            </tr>
+            <tr>
+                <td colspan='2'><input name="submit" type="submit" th:value="#{enter}" class="btn btn-primary" /></td>
+            </tr>
+        </table>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </form>
+
+</div>
+
+</body>
+</html>
