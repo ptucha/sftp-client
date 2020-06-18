@@ -2,3 +2,4 @@ ssh.host=
 ssh.port=
 ssh.user=
 ssh.pass=
+ssh.path=

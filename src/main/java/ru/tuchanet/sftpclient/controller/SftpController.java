@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
@@ -29,12 +30,19 @@ public class SftpController {
 	
 	@Autowired
 	SftpService sftpService;
+
+	@Value("${ssh.path}")
+	private String  path;
 	
 	@GetMapping("/list")
 	public String list(Model model, 
-			@RequestParam(name = "folder", required = false, defaultValue = "/") String folder,
+			@RequestParam(name = "folder", required = false) String folder,
 			@RequestParam(name = "sort", required = false, defaultValue = "type") String sort,
 			@RequestParam(name = "dir", required = false, defaultValue = "desc") String dir) {
+		
+		if(folder == null) {
+			folder = path;
+		}
 		
 		List<SftpItem> list;
 		Exception error = null;
