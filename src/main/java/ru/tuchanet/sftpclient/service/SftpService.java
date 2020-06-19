@@ -51,6 +51,7 @@ public class SftpService implements InitializingBean{
 		session = jsch.getSession(user, host, port);
 		session.setPassword(pass);
 		session.setConfig(config);
+		sftp = null;
 		
 	}
 	
@@ -58,7 +59,17 @@ public class SftpService implements InitializingBean{
 	private ChannelSftp getSFTP() throws JSchException{
 		
 		if(! session.isConnected()) {
-			session.connect();
+			try {
+				session.connect();
+			}catch(JSchException e) {
+				
+				// Jsch disconnection require to recreate session.
+				// It will be "Packet corrupted" exception otherwise.
+				
+				initSession();
+				session.connect();
+				
+			}
 		}
 		
 		if(sftp == null) {
@@ -76,7 +87,17 @@ public class SftpService implements InitializingBean{
 	public List<SftpItem> list(String dir) throws SftpException, JSchException {
 		List<SftpItem> list = new ArrayList<>();
 		
-		Vector<LsEntry> ls = getSFTP().ls(dir);
+		Vector<LsEntry> ls;
+		try {
+			ls = getSFTP().ls(dir);
+		} catch (Exception e) {
+			
+			// Reconnect on error and retry
+			initSession();
+			ls = getSFTP().ls(dir);
+			
+		}
+		
 		for(LsEntry entry : ls){
 			String name = entry.getFilename();
 			SftpATTRS attrs = entry.getAttrs();
@@ -100,7 +121,17 @@ public class SftpService implements InitializingBean{
 	}
 
 	public InputStream getFile(String file) throws SftpException, JSchException {
-		return getSFTP().get(file);
+		InputStream istream;
+		
+		try {
+			istream = getSFTP().get(file);
+		}catch (Exception e) {
+			// Reconnect on error and retry
+			initSession();
+			istream = getSFTP().get(file);
+		}
+				
+		return istream;
 	}
 
 	
