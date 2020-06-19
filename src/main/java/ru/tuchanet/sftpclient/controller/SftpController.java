@@ -1,6 +1,9 @@
 package ru.tuchanet.sftpclient.controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,6 +19,7 @@ import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -33,6 +37,12 @@ public class SftpController {
 
 	@Value("${ssh.path}")
 	private String  path;
+	
+	@RequestMapping("*")
+	public String any() {
+		return "redirect:/list";
+	}
+	
 	
 	@GetMapping("/list")
 	public String list(Model model, 
@@ -74,7 +84,7 @@ public class SftpController {
 	@GetMapping("/download")
 	@ResponseBody
 	public ResponseEntity<InputStreamResource> download(Model model, HttpServletResponse response, 
-			@RequestParam(name = "file", required = true, defaultValue = "/") String file) throws SftpException, JSchException {
+			@RequestParam(name = "file", required = true, defaultValue = "/") String file) throws SftpException, JSchException, UnsupportedEncodingException {
 		
 		List<SftpItem> list = sftpService.list(file);
 		
@@ -83,7 +93,7 @@ public class SftpController {
 			String fileName = Paths.get(file).getFileName().toString();
 			return ResponseEntity.ok()
 					.header("Content-Type", "application/octet-stream")
-					.header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
+					.header("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(fileName, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20") + "\"")
 					.header("Content-Length", Long.toString(item.getSize()))
 					.body(new InputStreamResource(sftpService.getFile(file)));
 		}
